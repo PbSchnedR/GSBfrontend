@@ -9,12 +9,6 @@ const BillDetailsSidebar = ({ dateNote, dateCreation }) => {
         <div className="text-gray-500 text-xs mb-1">Date de création</div>
         <div className="text-md font-semibold text-gray-800">{dateCreation}</div>
       </div>
-      <button className="w-full mb-2 py-2 px-4 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition">
-        Modifier
-      </button>
-      <button className="w-full py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md font-semibold transition">
-        Supprimer
-      </button>
     </div>
   );
 };
