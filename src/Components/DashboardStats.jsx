@@ -30,29 +30,35 @@ const stats = [
 ];
 
 const DashboardStats = () => (
-  <div className="mb-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
-    {/* Stats cards */}
-    {stats.map((stat, idx) => (
-      <div key={stat.title} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col justify-between min-h-[150px] relative">
-        {/* Icône + menu */}
-        <div className="flex items-start justify-between mb-2">
-          <div className="bg-gray-100 rounded-lg p-2 flex items-center justify-center">
-            {stat.icon}
+  <div className="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    {/* Colonne pour les 3 cartes de stats empilées */}
+    <div className="lg:col-span-1 flex flex-col gap-4">
+      {stats.map((stat) => (
+        <div 
+          key={stat.title} 
+          className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex flex-col justify-between min-h-[100px] relative"
+        >
+          {/* Icône + menu */}
+          <div className="flex items-start justify-between mb-2">
+            <div className="bg-gray-100 rounded-lg p-2 flex items-center justify-center">
+              {stat.icon}
+            </div>
+            <button className="text-gray-400 hover:text-gray-600">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+            </button>
           </div>
-          <button className="text-gray-400 hover:text-gray-600">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
-          </button>
+          <div className="mb-1 text-sm text-gray-500">{stat.title}</div>
+          <div className="text-2xl font-bold mb-1">{stat.value}</div>
+          <div className="flex items-center text-xs">
+            <span className={`${stat.changeColor} font-semibold mr-1`}>{stat.change}</span>
+            <span className="text-gray-400">{stat.changeText}</span>
+          </div>
         </div>
-        <div className="mb-1 text-sm text-gray-500">{stat.title}</div>
-        <div className="text-2xl font-bold mb-1">{stat.value}</div>
-        <div className="flex items-center text-xs">
-          <span className={stat.changeColor + ' font-semibold mr-1'}>{stat.change}</span>
-          <span className="text-gray-400">{stat.changeText}</span>
-        </div>
-      </div>
-    ))}
+      ))}
+    </div>
+    
     {/* Pie chart à droite */}
-    <div className="col-span-1 flex items-center justify-center">
+    <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center justify-center min-h-[332px]">
       <ExpenseTypePieChart />
     </div>
   </div>

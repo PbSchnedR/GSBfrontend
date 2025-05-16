@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../common/Header';
+import Sidebar from '../common/Sidebar';
 import DashboardHeader from '../Components/DashboardHeader';
 import DashboardStats from '../Components/DashboardStats';
 import DashboardCTA from '../Components/DashboardCTA';
@@ -10,14 +10,14 @@ import { ThemeProvider } from '../common/ThemeContext';
 const Dashboard = () => {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="p-6">
+      <div className="min-h-screen bg-gray-50 flex">
+        <Sidebar />
+        <main className="flex-1 p-6 ml-64">
           <DashboardStats />
           <DashboardCTA />
           <DashboardFilters />
           <DashboardList />
-        </div>
+        </main>
       </div>
     </ThemeProvider>
   );

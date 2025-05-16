@@ -1,7 +1,7 @@
 import React from 'react';
 import DashboardAdminStats from '../Components/DashboardAdminStats';
 import DashboardAdminList from '../Components/DashboardAdminList';
-import Header from '../common/Header';
+import Sidebar from '../common/Sidebar';
 import { ThemeProvider } from '../common/ThemeContext';
 
 const stats = [
@@ -110,11 +110,12 @@ const users = [
 const DashboardAdmin = () => {
   return (
     <ThemeProvider>
-        <Header />
-
-      <div className="min-h-screen bg-gray-50 p-8">
+      <div className="flex min-h-screen bg-gray-50">
+        <Sidebar />
+        <main className="flex-1 p-8 ml-64">
           <DashboardAdminStats stats={stats} />
           <DashboardAdminList users={users} />
+        </main>
       </div>
     </ThemeProvider>
   );
