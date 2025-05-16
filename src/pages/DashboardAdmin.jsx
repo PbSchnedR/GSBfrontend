@@ -111,8 +111,10 @@ const DashboardAdmin = () => {
   return (
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50">
+        
         <Sidebar />
         <main className="flex-1 p-8 ml-64">
+          <h1 className="text-2xl font-bold mb-6">Utilisateurs</h1>
           <DashboardAdminStats stats={stats} />
           <DashboardAdminList users={users} />
         </main>
