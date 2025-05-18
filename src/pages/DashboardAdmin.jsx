@@ -2,6 +2,7 @@ import React from 'react';
 import DashboardAdminStats from '../Components/DashboardAdminStats';
 import DashboardAdminList from '../Components/DashboardAdminList';
 import Sidebar from '../common/Sidebar';
+import SidebarAdmin from '../common/SidebarAdmin';
 import { ThemeProvider } from '../common/ThemeContext';
 
 const stats = [
@@ -112,8 +113,8 @@ const DashboardAdmin = () => {
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50">
         
-        <Sidebar />
-        <main className="flex-1 p-8 ml-64">
+        <SidebarAdmin />
+        <main className="flex-1 p-4 sm:p-6 lg:ml-64 lg:p-8">
           <h1 className="text-2xl font-bold mb-6">Utilisateurs</h1>
           <DashboardAdminStats stats={stats} />
           <DashboardAdminList users={users} />

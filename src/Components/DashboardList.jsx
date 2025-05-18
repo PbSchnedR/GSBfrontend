@@ -190,7 +190,7 @@ const DashboardList = () => {
       <div className="space-y-4">
         {currentNotes.map((note) => (
           <div key={note.id} className="flex bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden items-center px-4 py-3">
-            <div className="flex-1 grid grid-cols-5 gap-4 items-center">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 items-center w-full">
               <div>
                 <span className="block text-xs text-gray-400">Date</span>
                 <span className="font-medium">{formatDate(note.date)}</span>
@@ -212,7 +212,7 @@ const DashboardList = () => {
                 <span className="font-medium">{formatDateTime(note.createdAt)}</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-2 ml-2">
               <button 
                 onClick={() => handleViewDetails(note)}
                 className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-purple-600 transition-colors"

@@ -5,6 +5,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [error, setError] = useState('');
 
   const handleFileChange = (e) => {
     const f = e.target.files[0];
@@ -20,12 +21,16 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!montant || !description || !file) return;
+    if (!montant || !description || !file) {
+      setError('Veuillez remplir tous les champs.');
+      return;
+    }
     onCreate({ montant, description, file });
     setMontant('');
     setDescription('');
     setFile(null);
     setPreview(null);
+    setError('');
     onClose();
   };
 
@@ -71,7 +76,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-500"
+              className="block w-full text-sm text-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 p-4"
               required
             />
             {preview && (
@@ -80,7 +85,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
           </div>
           <button
             type="submit"
-            className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md font-semibold transition mt-2"
+            className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md font-semibold transition mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!montant || !description || !file}
           >
             Créer la note de frais
