@@ -5,8 +5,8 @@ import Statistics from './pages/Statistics';
 import Attachments from './pages/Attachments';
 import Profile from './pages/Profile';
 import Support from './pages/Support';
-import DashboardAdmin from './pages/DashboardAdmin';
-
+import DashboardAdminUsers from './pages/DashboardAdminUsers';
+import UserBills from './pages/UserBills';
 function App() {
 
   return (
@@ -19,7 +19,8 @@ function App() {
           <Route path='/attachments' element={<Attachments />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/support' element={<Support />} />
-          <Route path='/dashboard-admin' element={<DashboardAdmin />} />
+          <Route path='/dashboard-admin/users' element={<DashboardAdminUsers />} />
+          <Route path='/admin/users/:name/bills' element={<UserBills />} />
         </Routes>
       </BrowserRouter>
     </>

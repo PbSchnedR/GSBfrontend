@@ -108,7 +108,7 @@ const users = [
   },
 ];
 
-const DashboardAdmin = () => {
+const DashboardAdminUsers = () => {
   return (
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50">
@@ -124,4 +124,4 @@ const DashboardAdmin = () => {
   );
 };
 
-export default DashboardAdmin; 
+export default DashboardAdminUsers; 

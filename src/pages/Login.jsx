@@ -14,10 +14,10 @@ const Login = () => {
       return;
     }
     // Simulation d'une erreur d'inscription
-    if (isSignUp) {
+    /*if (isSignUp) {
       setError('Cet email est déjà utilisé');
       return;
-    }
+    }*/
     navigate('/dashboard');
   };
 

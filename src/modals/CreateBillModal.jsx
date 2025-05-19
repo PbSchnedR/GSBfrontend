@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 
-const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => {} }) => {
+const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   const [montant, setMontant] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
+  const [date, setDate] = useState('');
+  const [type, setType] = useState('');
+
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg2ZmY2ZWY4N2FhMmJmMzZjM2RhOCIsImVtYWlsIjoic2luZ2VAbWFpbC5mciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NzY0MTk5NSwiZXhwIjoxNzQ3NzI4Mzk1fQ.SFNpSuZkU2o37c8TfkGyEG2pokVxUcpoR8J1JAl19gw"
+
 
   const handleFileChange = (e) => {
     const f = e.target.files[0];
@@ -25,13 +30,41 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
       setError('Veuillez remplir tous les champs.');
       return;
     }
-    onCreate({ montant, description, file });
-    setMontant('');
-    setDescription('');
-    setFile(null);
-    setPreview(null);
-    setError('');
-    onClose();
+
+    (async () => {
+      try {
+        const formData = new FormData();
+    
+        // Ajout du fichier
+        formData.append('proof', file); 
+    
+        // Création des métadonnées en JSON
+        const metadata = {
+          amount: montant,
+          description: description,
+          date: date,
+          type: type
+        };
+        formData.append('metadata', JSON.stringify(metadata));
+    
+        // Envoi de la requête
+        const response = await fetch('http://127.0.0.1:3000/api/bills', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}` // PAS de Content-Type ici
+          },
+          body: formData
+        });
+    
+        const data = await response.json();
+        console.log("data :", data);
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi du formulaire :', error);
+      }
+    })();
+    
+    
+    
   };
 
   if (!isOpen) return null;
@@ -69,6 +102,31 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
               required
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Type de note de frais</label>
+            <select
+              value={type}
+              onChange={e => setType(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+              required
+            >
+              <option value="Repas">Repas</option>
+              <option value="Transport">Transport</option>
+              <option value="Hébergement">Hébergement</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+              placeholder="Décrivez la dépense..."
+              required
+            />
+          </div>
           {/* Preuve */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Preuve (image)</label>
@@ -86,7 +144,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {}, onCreate = () => 
           <button
             type="submit"
             className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md font-semibold transition mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!montant || !description || !file}
+            disabled={!montant || !description || !file || !date}
           >
             Créer la note de frais
           </button>
