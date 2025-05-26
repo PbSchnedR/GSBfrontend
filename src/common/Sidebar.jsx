@@ -1,21 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import moon from '../assets/moon-svgrepo-com.svg';
 import { useTheme } from './ThemeContext';
-import { Link, useLocation } from 'react-router-dom';
-import { HiDocumentText, HiChartBar, HiPaperClip, HiUser, HiQuestionMarkCircle, HiMenu, HiX, HiLogout } from 'react-icons/hi';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { HiDocumentText, HiChartBar, HiPaperClip, HiUser, HiQuestionMarkCircle, HiMenu, HiX, HiLogout, HiUserGroup } from 'react-icons/hi';
+import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
-  const { toggleDarkMode } = useTheme();
+  // const { toggleDarkMode } = useTheme();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const { logout, user } = useContext(AuthContext);
 
   const menuItems = [
-    { path: '/dashboard', icon: <HiDocumentText className="w-6 h-6" />, label: 'Notes de frais' },
-    { path: '/statistics', icon: <HiChartBar className="w-6 h-6" />, label: 'Statistiques' },
-    { path: '/attachments', icon: <HiPaperClip className="w-6 h-6" />, label: 'Justificatifs' },
-    { path: '/profile', icon: <HiUser className="w-6 h-6" />, label: 'Mon compte' },
-    { path: '/support', icon: <HiQuestionMarkCircle className="w-6 h-6" />, label: 'Support / Aide' },
+    { path: '/dashboard', icon: <HiDocumentText className="w-6 h-6" />, label: 'Notes de frais', role: 'all' },
+    { path: '/statistics', icon: <HiChartBar className="w-6 h-6" />, label: 'Statistiques', role: 'all' },
+    { path: '/attachments', icon: <HiPaperClip className="w-6 h-6" />, label: 'Justificatifs', role: 'all' },
+    { path: '/profile', icon: <HiUser className="w-6 h-6" />, label: 'Mon compte', role: 'all' },
+    {
+      id: 'users',
+      title: 'Utilisateurs',
+      icon: <HiUserGroup className="w-6 h-6" />,
+      path: '/dashboard-admin/users',
+      label : 'Utilisateurs',
+      role: 'admin'
+    },
+    { path: '/support', icon: <HiQuestionMarkCircle className="w-6 h-6" />, label: 'Support / Aide', role: 'all' },
   ];
+
+  const getMenuItems = () => {
+    if (user?.role === 'admin') {
+      return menuItems;
+    }
+    return menuItems.filter(item => item.role === 'all');
+  };
+
+  const renderMenuItems = (items, isMobile = false) => {
+    return items.map((item) => (
+      <Link
+        key={item.path}
+        to={item.path}
+        onClick={() => isMobile && setIsOpen(false)}
+        className={`flex items-center gap-${isMobile ? '4' : '3'} py-${isMobile ? '3' : '2'} px-${isMobile ? '4' : '3'} rounded-${isMobile ? 'xl' : ''} hover:bg-gray-700 text-${isMobile ? 'base' : 'sm'} font-medium transition-colors ${
+          location.pathname === item.path ? 'bg-purple-600 text-white' : isMobile ? 'text-gray-200' : 'text-gray-300'
+        }`}
+      >
+        {item.icon}
+        <span>{item.label}</span>
+      </Link>
+    ));
+  };
 
   // Version mobile/tablette
   const mobileSidebar = (
@@ -52,34 +87,23 @@ const Sidebar = () => {
             alt="avatar"
             className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md mb-3"
           />
-          <span className="text-lg font-semibold">Dylanette</span>
+          <span className="text-lg font-semibold">{user?.name || 'Utilisateur'}</span>
+          <span className="text-lg font-semibold mt-2">{user?.role || 'Chargement...'}</span>
         </div>
+
         <nav className="flex-grow flex flex-col gap-2 py-8 px-6">
-          {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-4 py-3 px-4 rounded-xl text-base font-medium transition-colors ${
-                location.pathname === item.path ? 'bg-purple-600 text-white' : 'text-gray-200 hover:bg-gray-700'
-              }`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
-          ))}
+          {renderMenuItems(getMenuItems(), true)}
         </nav>
         <div className="px-6 pb-8 pt-4 border-t border-gray-700 flex flex-col gap-3">
           <button 
             className="w-full flex items-center gap-3 p-3 hover:bg-gray-700 rounded-xl text-base"
-            onClick={toggleDarkMode}
           >
             <img src={moon} alt="moon" className="w-6 h-6" />
             <span>Changer thème</span>
           </button>
           <button
             className="w-full flex items-center gap-3 p-3 hover:bg-red-100 hover:text-red-700 rounded-xl text-base transition-colors bg-transparent text-white border border-transparent hover:border-red-200"
-            onClick={() => alert('Déconnexion')}
+            onClick={logout}
           >
             <HiLogout className="w-6 h-6" />
             <span>Déconnexion</span>
@@ -97,26 +121,15 @@ const Sidebar = () => {
     >
       <div className="p-4 border-b border-gray-700 flex flex-col items-center">
         <img src="/src/assets/GSB_logo_white.png" alt="GSB_logo" className="w-auto h-20 mb-2" />
+        <span className="text-lg font-semibold mt-2">{user?.role || ''}</span>
       </div>
       <nav className="flex-grow p-4 space-y-2">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-700 text-sm font-medium transition-colors ${
-              location.pathname === item.path ? 'bg-purple-600 text-white' : 'text-gray-300'
-            }`}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </Link>
-        ))}
+        {renderMenuItems(getMenuItems())}
       </nav>
       <div className="p-4 border-t border-gray-700 space-y-3">
-        
         <button
           className="w-full flex items-center gap-3 p-2 hover:bg-red-100 hover:text-red-700 rounded text-sm transition-colors bg-transparent text-white border border-transparent hover:border-red-200"
-          onClick={() => alert('Déconnexion')}
+          onClick={logout}
         >
           <HiLogout className="w-5 h-5" />
           <span>Déconnexion</span>

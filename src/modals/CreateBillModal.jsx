@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   const [montant, setMontant] = useState('');
@@ -8,8 +9,8 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   const [error, setError] = useState('');
   const [date, setDate] = useState('');
   const [type, setType] = useState('');
+const { token } = useContext(AuthContext);
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg2ZmY2ZWY4N2FhMmJmMzZjM2RhOCIsImVtYWlsIjoic2luZ2VAbWFpbC5mciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NzY0MTk5NSwiZXhwIjoxNzQ3NzI4Mzk1fQ.SFNpSuZkU2o37c8TfkGyEG2pokVxUcpoR8J1JAl19gw"
 
 
   const handleFileChange = (e) => {
@@ -63,7 +64,7 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg2ZmY2ZWY4N2Fh
       }
     })();
     
-    
+    onClose();
     
   };
 

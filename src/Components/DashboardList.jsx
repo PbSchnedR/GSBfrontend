@@ -3,8 +3,8 @@ import heart from '../assets/heart-svgrepo-com.svg';
 import { HiEye } from 'react-icons/hi';
 import BillDetailsModal from '../modals/BillDetailsModal';
 import Pagination from './Pagination';
-
-
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
 
 // Fonction pour formater la date en français
@@ -47,8 +47,7 @@ const DashboardList = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3);
 
   const [notes, setNotes] = useState([]);
-// const token = localStorage.getItem('token');
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg2ZmY2ZWY4N2FhMmJmMzZjM2RhOCIsImVtYWlsIjoic2luZ2VAbWFpbC5mciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NzY0MTk5NSwiZXhwIjoxNzQ3NzI4Mzk1fQ.SFNpSuZkU2o37c8TfkGyEG2pokVxUcpoR8J1JAl19gw"
+const token = localStorage.getItem('token');
 useEffect(() => {
   (async () => {
     try{
@@ -68,6 +67,7 @@ useEffect(() => {
     }
   })();
 }, []);
+
 
   useEffect(() => {
     const calculateItemsPerPage = () => {

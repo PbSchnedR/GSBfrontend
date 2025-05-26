@@ -2,8 +2,8 @@ import React from 'react';
 import DashboardAdminStats from '../Components/DashboardAdminStats';
 import DashboardAdminList from '../Components/DashboardAdminList';
 import Sidebar from '../common/Sidebar';
-import SidebarAdmin from '../common/SidebarAdmin';
 import { ThemeProvider } from '../common/ThemeContext';
+import { useContext, useEffect, useState } from 'react';
 
 const stats = [
   {
@@ -33,7 +33,8 @@ const stats = [
   },
 ];
 
-const users = [
+/*const users = [
+
   {
     name: 'Amélie Laurent',
     role: 'Fondatrice & CEO',
@@ -106,14 +107,35 @@ const users = [
     link: '#',
     linkLabel: 'Customer Success',
   },
-];
+];*/
+
 
 const DashboardAdminUsers = () => {
+  const [users, setUsers] = useState([]);
+  const token = localStorage.getItem('token');
+  useEffect(() => {
+    (async () => {
+      try{
+        const response = await fetch('http://127.0.0.1:3000/api/users',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+      }
+    })();
+  }, []);
   return (
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50">
-        
-        <SidebarAdmin />
+        <Sidebar />
         <main className="flex-1 p-4 sm:p-6 lg:ml-64 lg:p-8">
           <h1 className="text-2xl font-bold mb-6">Utilisateurs</h1>
           <DashboardAdminStats stats={stats} />

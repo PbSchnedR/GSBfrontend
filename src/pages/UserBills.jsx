@@ -1,48 +1,23 @@
-import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { HiOutlineDocumentText, HiOutlineCurrencyEuro, HiOutlineClock } from 'react-icons/hi';
-import SidebarAdmin from '../common/SidebarAdmin';
 import { ThemeProvider } from '../common/ThemeContext';
+import { useContext, useEffect, useState } from 'react';
+import Sidebar from '../common/Sidebar';
 
 const UserBills = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('all');
-
-  // Simuler les données de l'utilisateur (à remplacer par un appel API)
-  const user = {
-    name: 'Amélie Laurent',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    role: 'Fondatrice & CEO',
-  };
-
-  // Simuler les notes de frais (à remplacer par un appel API)
-  const bills = [
-    {
-      id: 1,
-      title: 'Restaurant avec client',
-      date: '12/06/2024',
-      amount: '85,50 €',
-      status: 'pending',
-      type: 'restaurant',
-    },
-    {
-      id: 2,
-      title: 'Transport en taxi',
-      date: '10/06/2024',
-      amount: '45,00 €',
-      status: 'approved',
-      type: 'transport',
-    },
-    {
-      id: 3,
-      title: 'Hôtel déplacement',
-      date: '08/06/2024',
-      amount: '320,00 €',
-      status: 'rejected',
-      type: 'hotel',
-    },
-  ];
+  const [user, setUser] = useState(null);
+  const [bills, setBills] = useState([{
+    id: 1,
+    title: 'Note de frais 1',
+    amount: 100,
+    status: 'pending',
+    date: '2021-01-01'
+  }]);
+  const [isLoading, setIsLoading] = useState(true);
+  const defaultAvatar = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -70,10 +45,75 @@ const UserBills = () => {
     }
   };
 
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response_user = await fetch(`http://localhost:3000/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const data_user = await response_user.json();
+        setUser(data_user);
+
+        const response_bills = await fetch(`http://localhost:3000/api/bills/user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const data_bills = await response_bills.json();
+       setBills(data_bills);
+       console.log(data_bills);
+      } catch (error) {
+        console.error('Erreur:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId, token]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen bg-gray-50">
+        <Sidebar />
+        <main className="flex-1 p-8">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <p className="text-gray-600 font-medium">Chargement des données...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex min-h-screen bg-gray-50">
+        <Sidebar />
+        <main className="flex-1 p-8">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            Utilisateur non trouvé
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50">
-        <SidebarAdmin />
+        <Sidebar />
         <main className="flex-1 p-4 sm:p-6 lg:ml-64 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {/* En-tête */}
@@ -87,9 +127,13 @@ const UserBills = () => {
                 </button>
                 <div className="flex items-center space-x-4">
                   <img
-                    src={user.avatar}
+                    src={user.avatar || defaultAvatar}
                     alt={user.name}
                     className="w-12 h-12 rounded-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = defaultAvatar;
+                    }}
                   />
                   <div>
                     <h1 className="text-2xl font-bold">{user.name}</h1>

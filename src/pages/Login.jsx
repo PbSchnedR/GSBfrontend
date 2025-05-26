@@ -6,20 +6,29 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulation d'une erreur de connexion
-    if (!isSignUp) {
-      setError('Email ou mot de passe incorrect');
-      return;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    try {
+      const response = await fetch('http://127.0.0.1:3000/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+      if(!data.token){
+        alert('Email ou mot de passe incorrect');
+        return;
+      }
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
+    } catch (error) {
+      console.log(error);
     }
-    // Simulation d'une erreur d'inscription
-    /*if (isSignUp) {
-      setError('Cet email est déjà utilisé');
-      return;
-    }*/
-    navigate('/dashboard');
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -81,11 +90,11 @@ const Login = () => {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" placeholder="Entrez votre email" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400" />
+              <input name="email" type="email" placeholder="Entrez votre email" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
-              <input type="password" placeholder="••••••••" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400" />
+              <input name="password" type="password" placeholder="••••••••" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400" />
             </div>
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center">

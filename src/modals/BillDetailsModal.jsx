@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { HiX, HiDocumentText, HiCalendar, HiClock } from 'react-icons/hi';
 import BillDetailsSidebar from '../Components/BillDetails/Sidebar';
 import BillImage from '../Components/BillDetails/BillImage';
 import BillInfo from '../Components/BillDetails/BillInfo';
+import { AuthContext } from '../context/AuthContext';
 
 const BillDetailsModal = ({ isOpen, onClose, bill }) => {
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg2ZmY2ZWY4N2FhMmJmMzZjM2RhOCIsImVtYWlsIjoic2luZ2VAbWFpbC5mciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NzY0MTk5NSwiZXhwIjoxNzQ3NzI4Mzk1fQ.SFNpSuZkU2o37c8TfkGyEG2pokVxUcpoR8J1JAl19gw"
+  const { token } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     amount: bill?.montant?.replace(' €', '') || '',
@@ -23,7 +24,7 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg2ZmY2ZWY4N2Fh
   };
 
   const handleSave = () => {
-    // Ici, tu peux ajouter la logique pour sauvegarder les modifications
+    
     setIsEditing(false);
     setFormData({
       amount: bill?.montant?.replace(' €', '') || '',

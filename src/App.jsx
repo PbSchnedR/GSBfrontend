@@ -7,21 +7,27 @@ import Profile from './pages/Profile';
 import Support from './pages/Support';
 import DashboardAdminUsers from './pages/DashboardAdminUsers';
 import UserBills from './pages/UserBills';
+import { AuthProvider } from './context/AuthContext';
+
+import PrivateRoute from './context/PrivateRoute';
+import AdminRoute from './context/AdminRoute';
 function App() {
 
   return (
     <>
       <BrowserRouter>
+       <AuthProvider>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/statistics' element={<Statistics />} />
-          <Route path='/attachments' element={<Attachments />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/support' element={<Support />} />
-          <Route path='/dashboard-admin/users' element={<DashboardAdminUsers />} />
-          <Route path='/admin/users/:name/bills' element={<UserBills />} />
+          <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path='/statistics' element={<PrivateRoute><Statistics /></PrivateRoute>} />
+          <Route path='/attachments' element={<PrivateRoute><Attachments /></PrivateRoute>} />
+          <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path='/support' element={<PrivateRoute><Support /></PrivateRoute>} />
+          <Route path='/dashboard-admin/users' element={<AdminRoute><DashboardAdminUsers /></AdminRoute>} />
+          <Route path='/admin/users/:userId/bills' element={<AdminRoute><UserBills /></AdminRoute>} />
         </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </>
   )
