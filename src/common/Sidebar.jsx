@@ -83,11 +83,15 @@ const Sidebar = () => {
       >
         <div className="flex flex-col items-center py-8 border-b border-gray-700 bg-gray-800">
           <img
-            src="/src/assets/Dylans_life_matter.png"
+            src={user?.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
             alt="avatar"
             className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md mb-3"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            }}
           />
-          <span className="text-lg font-semibold">{user?.name || 'Utilisateur'}</span>
+          <span className="text-lg font-semibold">{user?.name}</span>
           {user?.role === 'admin' && <span className="text-lg font-semibold mt-2">Administrateur</span>}
         </div>
 
@@ -120,7 +124,16 @@ const Sidebar = () => {
       style={{ minWidth: '16rem' }}
     >
       <div className="p-4 border-b border-gray-700 flex flex-col items-center">
-        <img src="/src/assets/GSB_logo_white.png" alt="GSB_logo" className="w-auto h-20 mb-2" />
+        <img
+          src={user?.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
+          alt="avatar"
+          className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md mb-3"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+          }}
+        />
+        <span className="text-lg font-semibold">{user?.name}</span>
         {user?.role === 'admin' && <span className="text-lg font-semibold mt-2">Administrateur</span>}
       </div>
       <nav className="flex-grow p-4 space-y-2">

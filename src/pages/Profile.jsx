@@ -4,10 +4,12 @@ import { ThemeProvider } from '../common/ThemeContext';
 import ProfileHeader from '../Components/Profile/ProfileHeader';
 import PersonalInfoForm from '../Components/Profile/PersonalInfoForm';
 import ProfileActions from '../Components/Profile/ProfileActions';
+import ChangePswd from '../Components/Profile/ChangePswd';
 import { AuthContext } from '../context/AuthContext';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangePswdOpen, setIsChangePswdOpen] = useState(false);
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -100,7 +102,10 @@ const Profile = () => {
                 {/* Sécurité */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold border-b pb-2">Sécurité</h3>
-                  <button className="text-purple-600 hover:text-purple-700 font-medium">
+                  <button 
+                    onClick={() => setIsChangePswdOpen(true)}
+                    className="text-purple-600 hover:text-purple-700 font-medium"
+                  >
                     Changer le mot de passe
                   </button>
                 </div>
@@ -108,6 +113,11 @@ const Profile = () => {
             </div>
           </div>
         </main>
+
+        <ChangePswd 
+          isOpen={isChangePswdOpen}
+          onClose={() => setIsChangePswdOpen(false)}
+        />
       </div>
     </ThemeProvider>
   );
