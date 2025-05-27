@@ -6,7 +6,6 @@ import Attachments from './pages/Attachments';
 import Profile from './pages/Profile';
 import Support from './pages/Support';
 import DashboardAdminUsers from './pages/DashboardAdminUsers';
-import UserBills from './pages/UserBills';
 import { AuthProvider } from './context/AuthContext';
 
 import PrivateRoute from './context/PrivateRoute';
@@ -25,7 +24,6 @@ function App() {
           <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path='/support' element={<PrivateRoute><Support /></PrivateRoute>} />
           <Route path='/dashboard-admin/users' element={<AdminRoute><DashboardAdminUsers /></AdminRoute>} />
-          <Route path='/admin/users/:userId/bills' element={<AdminRoute><UserBills /></AdminRoute>} />
         </Routes>
         </AuthProvider>
       </BrowserRouter>

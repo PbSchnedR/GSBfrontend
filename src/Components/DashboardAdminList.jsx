@@ -5,6 +5,7 @@ import BillDetailsModal from '../modals/BillDetailsModal';
 import Pagination from './Pagination';
 import { useNavigate } from 'react-router-dom';
 import { HiOutlineDocumentText, HiOutlineCurrencyEuro, HiOutlineClock } from 'react-icons/hi';
+import ConfirmationModal from '../modals/ConfirmatioModal';
 
 // Fonction pour formater la date en français
 const formatDate = (dateString) => {
@@ -45,6 +46,7 @@ const DashboardAdminList = ({ users }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [userBills, setUserBills] = useState([]);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
@@ -104,6 +106,28 @@ const DashboardAdminList = ({ users }) => {
   const endIndex = startIndex + itemsPerPage;
   const currentBills = userBills.slice(startIndex, endIndex);
 
+  const handleDeleteUser = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/api/users/${selectedUser._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setIsModalDeleteOpen(false);
+        navigate(0);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+    }
+  };
+
+  const handleEditUser = () => {
+    // TODO: Ouvrir une modal ou rediriger vers la page d'édition
+    alert('Édition à implémenter');
+  };
+
   return (
     <div className="mt-8">
       {!selectedUser ? (
@@ -139,15 +163,29 @@ const DashboardAdminList = ({ users }) => {
             <h2 className="text-2xl font-semibold text-gray-900">
               Notes de frais de {selectedUser.name}
             </h2>
-            <button
-              onClick={() => setSelectedUser(null)}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-              </svg>
-              Retour aux utilisateurs
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleEditUser}
+                className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700 flex items-center gap-2"
+              >
+                Modifier
+              </button>
+              <button
+                onClick={() => setIsModalDeleteOpen(true)}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 flex items-center gap-2"
+              >
+                Supprimer l'utilisateur
+              </button>
+              <button
+                onClick={() => setSelectedUser(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                </svg>
+                Retour aux utilisateurs
+              </button>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -204,6 +242,13 @@ const DashboardAdminList = ({ users }) => {
         onClose={() => setSelectedBill(null)} 
         bill={selectedBill}
       />
+
+<ConfirmationModal
+    isOpen={isModalDeleteOpen}
+    message="Voulez-vous vraiment supprimer cet utilisateur ?"
+    onConfirm={handleDeleteUser}
+    onCancel={() => setIsModalDeleteOpen(false)}
+  />
     </div>
   );
 };
