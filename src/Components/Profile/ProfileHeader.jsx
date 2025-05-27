@@ -1,10 +1,12 @@
 import React from 'react';
 
 const ProfileHeader = ({ profile }) => {
+  const defaultAvatar = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+
   return (
     <div className="flex items-center gap-6">
       <img
-        src="https://randomuser.me/api/portraits/women/44.jpg"
+        src={profile.avatar || defaultAvatar}
         alt="Profile"
         className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
       />

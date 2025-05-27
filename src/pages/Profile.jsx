@@ -1,30 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Sidebar from '../common/Sidebar';
 import { ThemeProvider } from '../common/ThemeContext';
 import ProfileHeader from '../Components/Profile/ProfileHeader';
 import PersonalInfoForm from '../Components/Profile/PersonalInfoForm';
 import ProfileActions from '../Components/Profile/ProfileActions';
+import { AuthContext } from '../context/AuthContext';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: 'Amélie Laurent',
-    email: 'amelie.laurent@gsb.com',
-    rib: 'FR76 XXXX XXXX XXXX XXXX XXXX XXX',
-    role: 'Développeuse Frontend',
-    department: 'IT',
+    name: '',
+    email: '',
+    rib: '',
+    role: '',
+    department: '',
   });
-
+  const { token, user } = useContext(AuthContext);
   const [formData, setFormData] = useState(profile);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:3000/api/users/${user.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        setProfile(data);
+        setFormData(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du profil:', error);
+      }
+    };
+
+    fetchProfile();
+  }, [token]);
 
   const handleEdit = () => {
     setFormData(profile);
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    setProfile(formData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      setProfile(data);
+      setIsEditing(false);
+      console.log(data);  
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du profil:', error);
+    }
   };
 
   const handleCancel = () => {

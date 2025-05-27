@@ -8,7 +8,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
   const [date, setDate] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState('Repas');
 const { token } = useContext(AuthContext);
 
 

@@ -47,6 +47,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
         );
         const data = await response.json();
         console.log(data);
+        onClose();
       } catch (error) {
         console.error('Erreur lors de la récupération des notes de frais:', error);
       }
@@ -75,6 +76,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
         console.error('Erreur lors de la suppression de la note de frais:', error);
       }
     })();
+    onClose();
   };
   
   if (!isOpen) return null;
