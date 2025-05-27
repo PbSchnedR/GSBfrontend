@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { HiX, HiDocumentText, HiCalendar, HiClock } from 'react-icons/hi';
 import BillDetailsSidebar from '../Components/BillDetails/Sidebar';
 import BillImage from '../Components/BillDetails/BillImage';
 import BillInfo from '../Components/BillDetails/BillInfo';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const BillDetailsModal = ({ isOpen, onClose, bill }) => {
   const { token } = useContext(AuthContext);
@@ -14,6 +15,16 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
     type: bill?.type || 'restaurant',
     description: bill?.description || '',
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setFormData({
+      amount: bill?.montant?.replace(' €', '') || '',
+      date: bill?.dateNote || '',
+      type: bill?.type || 'restaurant',
+      description: bill?.description || '',
+    });
+  }, [bill]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +35,6 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
   };
 
   const handleSave = () => {
-    
     setIsEditing(false);
     setFormData({
       amount: bill?.montant?.replace(' €', '') || '',
@@ -32,7 +42,6 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
       type: bill?.type || 'restaurant',
       description: bill?.description || '',
     });
-
     (async () => {
       try{
         const response = await fetch(`http://127.0.0.1:3000/api/bills/${bill?._id}`,
@@ -48,6 +57,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
         const data = await response.json();
         console.log(data);
         onClose();
+        navigate(0);
       } catch (error) {
         console.error('Erreur lors de la récupération des notes de frais:', error);
       }
@@ -72,11 +82,12 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
         );
         const data = await response.json();
         console.log(data);
+        onClose();
+        navigate(0);
       } catch (error) {
         console.error('Erreur lors de la suppression de la note de frais:', error);
       }
     })();
-    onClose();
   };
   
   if (!isOpen) return null;

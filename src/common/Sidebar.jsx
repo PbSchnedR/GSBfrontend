@@ -58,7 +58,7 @@ const Sidebar = () => {
       {/* Menu Burger pour Mobile */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-gray-800 text-white hover:bg-gray-700"
+        className="lg:hidden fixed top-4 right-4 z-50 p-2 rounded-md bg-gray-800 text-white hover:bg-gray-700"
       >
         {isOpen ? <HiX className="w-7 h-7" /> : <HiMenu className="w-7 h-7" />}
       </button>
@@ -88,7 +88,7 @@ const Sidebar = () => {
             className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md mb-3"
           />
           <span className="text-lg font-semibold">{user?.name || 'Utilisateur'}</span>
-          <span className="text-lg font-semibold mt-2">{user?.role || 'Chargement...'}</span>
+          {user?.role === 'admin' && <span className="text-lg font-semibold mt-2">Administrateur</span>}
         </div>
 
         <nav className="flex-grow flex flex-col gap-2 py-8 px-6">
@@ -121,7 +121,7 @@ const Sidebar = () => {
     >
       <div className="p-4 border-b border-gray-700 flex flex-col items-center">
         <img src="/src/assets/GSB_logo_white.png" alt="GSB_logo" className="w-auto h-20 mb-2" />
-        <span className="text-lg font-semibold mt-2">{user?.role || ''}</span>
+        {user?.role === 'admin' && <span className="text-lg font-semibold mt-2">Administrateur</span>}
       </div>
       <nav className="flex-grow p-4 space-y-2">
         {renderMenuItems(getMenuItems())}

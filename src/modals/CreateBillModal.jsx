@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   const [montant, setMontant] = useState('');
@@ -10,6 +11,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   const [date, setDate] = useState('');
   const [type, setType] = useState('Repas');
 const { token } = useContext(AuthContext);
+const navigate = useNavigate();
 
 
 
@@ -59,6 +61,7 @@ const { token } = useContext(AuthContext);
     
         const data = await response.json();
         console.log("data :", data);
+        navigate(0);
       } catch (error) {
         console.error('Erreur lors de l\'envoi du formulaire :', error);
       }
@@ -71,8 +74,8 @@ const { token } = useContext(AuthContext);
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 relative animate-fadeIn">
+    <div className="fixed inset-0 min-h-screen bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 relative animate-fadeIn max-h-screen overflow-y-auto">
         {/* Bouton fermer */}
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">×</button>
         <form onSubmit={handleSubmit} className="p-8 flex flex-col gap-6">

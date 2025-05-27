@@ -33,6 +33,7 @@ const Login = () => {
       }
       localStorage.setItem('token', data.token);
       navigate('/dashboard');
+      navigate(0);
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +45,7 @@ const Login = () => {
       alert('Les mots de passe ne correspondent pas');
       return;
     }
-    try {
+    try {   
       const response = await fetch('http://127.0.0.1:3000/api/users', {
         method: 'POST',
         body: JSON.stringify({ 
@@ -58,12 +59,29 @@ const Login = () => {
         }
       });
       const data = await response.json();
-      if(!data.token){
-        alert('Email ou mot de passe incorrect');
-        return;
+      if(data){
+        try {
+          const response = await fetch('http://127.0.0.1:3000/api/login', {
+            method: 'POST',
+            body: JSON.stringify({ email: signupEmail, password: signupPassword }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+          if(!data.token){
+            alert('Email ou mot de passe incorrect');
+            return;
+          }
+          localStorage.setItem('token', data.token);
+          navigate('/dashboard');
+          navigate(0);
+        } catch (error) {
+          console.log(error);
+        }
+      }else{
+        alert('Inscription échouée');
       }
-      localStorage.setItem('token', data.token);
-      navigate('/dashboard');
     } catch (error) {
       console.log(error);
     }
