@@ -1,12 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
-
-const data = [
-  { name: 'Repas', value: 400 },
-  { name: 'Transport', value: 300 },
-  { name: 'Hébergement', value: 300 },
-  { name: 'Autres', value: 200 },
-];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -29,7 +22,33 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 };
 
-const PieChartWithCustomizedLabel = () => {
+const PieChartWithCustomizedLabel = ({ bills = [] }) => {
+  const data = useMemo(() => {
+    // Grouper les factures par type et calculer le montant total pour chaque type
+    const groupedBills = bills.reduce((acc, bill) => {
+      const type = bill.type || 'Autre';
+      if (!acc[type]) {
+        acc[type] = 0;
+      }
+      acc[type] += bill.amount;
+      return acc;
+    }, {});
+
+    // Transformer en format pour le graphique
+    return Object.entries(groupedBills).map(([name, value]) => ({
+      name,
+      value: parseFloat(value.toFixed(2))
+    }));
+  }, [bills]);
+
+  if (data.length === 0) {
+    return (
+      <div className="h-full flex items-center justify-center text-gray-500">
+        Aucune donnée disponible
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
