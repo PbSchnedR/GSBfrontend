@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Sidebar from '../common/Sidebar';
 import { ThemeProvider } from '../common/ThemeContext';
 import FileUploadZone from '../Components/Attachments/FileUploadZone';
 import FileList from '../Components/Attachments/FileList';
+import { AuthContext } from '../context/AuthContext';
 
 const Attachments = () => {
-  const [files, setFiles] = useState([
-    { id: 1, name: 'facture_restaurant.pdf', size: '2.4 MB', date: '12/06/2024', type: 'PDF' },
-    { id: 2, name: 'ticket_train.jpg', size: '1.8 MB', date: '10/06/2024', type: 'Image' },
-    { id: 3, name: 'hotel_invoice.pdf', size: '3.2 MB', date: '08/06/2024', type: 'PDF' },
-  ]);
+  const { token } = useContext(AuthContext);
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:3000/api/users/attachment/get', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        console.log(data);
+        setFiles(data || []);
+
+      } catch (error) {
+        console.error('Erreur lors de la récupération des pièces jointes:', error);
+      }
+    })();
+  }, [token]);
 
   const handleFileUpload = (event) => {
     const newFiles = Array.from(event.target.files).map(file => ({

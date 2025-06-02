@@ -204,7 +204,7 @@ const DashboardAdminList = ({ users }) => {
 
           <div className="space-y-4">
             {currentBills.map((note) => (
-              <div key={note.id} className="flex flex-col sm:flex-row bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden items-start sm:items-center px-3 sm:px-4 py-3">
+              <div key={note.id} className="flex bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden items-center px-4 py-3">
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 items-center w-full">
                   <div>
                     <span className="block text-xs text-gray-400">Date</span>
@@ -227,7 +227,7 @@ const DashboardAdminList = ({ users }) => {
                     <span className="font-medium text-xs sm:text-base">{formatDateTime(note.createdAt)}</span>
                   </div>
                 </div>
-                <div className="flex flex-row sm:flex-col items-center gap-2 ml-0 sm:ml-2 mt-2 sm:mt-0">
+                <div className="flex flex-col sm:flex-row items-center gap-2 ml-2">
                   <button 
                     onClick={() => handleViewDetails(note)}
                     className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-purple-600 transition-colors"

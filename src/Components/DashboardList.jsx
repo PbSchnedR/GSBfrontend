@@ -41,33 +41,33 @@ const BILL_HEIGHT = 80;
 // Marge en bas de la liste
 const BOTTOM_MARGIN = 100;
 
-const DashboardList = () => {
+const DashboardList = ({sortedBills}) => {
   const [selectedBill, setSelectedBill] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
 
   const [notes, setNotes] = useState([]);
-const token = localStorage.getItem('token');
-useEffect(() => {
-  (async () => {
-    try{
-      const response = await fetch('http://127.0.0.1:3000/api/bills',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      const data = await response.json();
-      setNotes(data);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des notes de frais:', error);
-    }
-  })();
-}, []);
+  const token = localStorage.getItem('token');
 
+  useEffect(() => {
+    (async () => {
+      try{
+        const response = await fetch('http://127.0.0.1:3000/api/bills',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        const data = await response.json();
+        setNotes(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des notes de frais:', error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     const calculateItemsPerPage = () => {
@@ -94,10 +94,25 @@ useEffect(() => {
     });
   };
 
-  const totalPages = Math.ceil(notes.length / itemsPerPage);
+  const getSortedNotes = () => {
+    if (!sortedBills) return notes;
+    
+    return [...notes].sort((a, b) => {
+      if (sortedBills === 'date') {
+        return new Date(a.date) - new Date(b.date);
+      }
+      if (sortedBills === 'amount') {
+        return a.amount - b.amount;
+      }
+      return 0;
+    });
+  };
+
+  const sortedNotes = getSortedNotes();
+  const totalPages = Math.ceil(sortedNotes.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentNotes = notes.slice(startIndex, endIndex);
+  const currentNotes = sortedNotes.slice(startIndex, endIndex);
 
   return (
     <>
