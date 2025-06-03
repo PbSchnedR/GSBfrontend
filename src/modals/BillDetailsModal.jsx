@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const BillDetailsModal = ({ isOpen, onClose, bill }) => {
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     amount: bill?.montant?.replace(' €', '') || '',
@@ -89,14 +89,58 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
       }
     })();
   };
+
+  const handleValidate = () => {
+    (async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:3000/api/bills/${bill?._id}/validate`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+        onClose();
+        navigate(0);
+      } catch (error) {
+        console.error('Erreur lors de la validation de la note de frais:', error);
+      }
+    })();
+  };
+
+  const handleReject = () => {
+    (async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:3000/api/bills/${bill?._id}/reject`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+        onClose();
+        navigate(0);
+      } catch (error) {
+        console.error('Erreur lors du refus de la note de frais:', error);
+      }
+    })();
+  };
   
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl">
-        {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-white">
+      <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+        {/* Header - Toujours visible */}
+        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-white flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-100 rounded-lg">
               <HiDocumentText className="w-6 h-6 text-purple-600" />
@@ -123,113 +167,131 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Left Column - Image */}
-            <div className="lg:w-1/2">
-              <div className="sticky top-6">
-                <BillImage image={bill?.proof} />
+        {/* Content - Scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6">
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Left Column - Image */}
+              <div className="lg:w-1/2">
+                <div className="lg:sticky lg:top-6">
+                  <BillImage image={bill?.proof} />
+                </div>
               </div>
-            </div>
 
-            {/* Right Column - Info and Actions */}
-            <div className="lg:w-1/2 space-y-6">
-              <div className="bg-gray-50 rounded-xl p-6">
-                {isEditing ? (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Montant (€)
-                      </label>
-                      <input
-                        type="number"
-                        name="amount"
-                        value={formData.amount}
-                        onChange={handleChange}
-                        step="0.01"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Date
-                      </label>
-                      <input
-                        type="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Type
-                      </label>
-                      <select
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                      >
-                        <option value="restaurant">Restaurant</option>
-                        <option value="transport">Transport</option>
-                        <option value="hotel">Hôtel</option>
-                        <option value="other">Autre</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Description
-                      </label>
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        rows="3"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <BillInfo 
-                    montant={bill?.montant} 
-                    type={bill?.type} 
-                    description={bill?.description} 
-                  />
-                )}
-              </div>
-              
-              <div className="bg-purple-50 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Actions</h3>
-                <div className="flex flex-wrap gap-3">
+              {/* Right Column - Info and Actions */}
+              <div className="lg:w-1/2 space-y-6">
+                <div className="bg-gray-50 rounded-xl p-6">
                   {isEditing ? (
-                    <button 
-                      onClick={handleSave}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                      Valider
-                    </button>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Montant (€)
+                        </label>
+                        <input
+                          type="number"
+                          name="amount"
+                          value={formData.amount}
+                          onChange={handleChange}
+                          step="0.01"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Date
+                        </label>
+                        <input
+                          type="date"
+                          name="date"
+                          value={formData.date}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Type
+                        </label>
+                        <select
+                          name="type"
+                          value={formData.type}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                        >
+                          <option value="restaurant">Restaurant</option>
+                          <option value="transport">Transport</option>
+                          <option value="hotel">Hôtel</option>
+                          <option value="other">Autre</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Description
+                        </label>
+                        <textarea
+                          name="description"
+                          value={formData.description}
+                          onChange={handleChange}
+                          rows="3"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
                   ) : (
-                    <>
-                      <button 
-                        onClick={() => setIsEditing(true)}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                      >
-                        Modifier
-                      </button>
-                      <button className="px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors">
-                        Télécharger
-                      </button>
-                      <button 
-                        onClick={handleDelete}
-                        className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                      >
-                        Supprimer
-                      </button>
-                    </>
+                    <BillInfo 
+                      montant={bill?.montant} 
+                      type={bill?.type} 
+                      description={bill?.description} 
+                    />
                   )}
+                </div>
+                
+                <div className="bg-purple-50 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Actions</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {isEditing ? (
+                      <button 
+                        onClick={handleSave}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      >
+                        Valider
+                      </button>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => setIsEditing(true)}
+                          className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                        >
+                          Modifier
+                        </button>
+                        <button className="px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors">
+                          Télécharger
+                        </button>
+                        <button 
+                          onClick={handleDelete}
+                          className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                        >
+                          Supprimer
+                        </button>
+                        {user?.role === 'admin' && bill?.status === 'En attente' && (
+                          <>
+                            <button 
+                              onClick={handleValidate}
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                              Valider
+                            </button>
+                            <button 
+                              onClick={handleReject}
+                              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                              Refuser
+                            </button>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

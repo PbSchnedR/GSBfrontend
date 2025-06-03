@@ -4,10 +4,12 @@ import { ThemeProvider } from '../common/ThemeContext';
 import FileUploadZone from '../Components/Attachments/FileUploadZone';
 import FileList from '../Components/Attachments/FileList';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Attachments = () => {
   const { token } = useContext(AuthContext);
   const [files, setFiles] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -30,19 +32,35 @@ const Attachments = () => {
   }, [token]);
 
   const handleFileUpload = (event) => {
-    const newFiles = Array.from(event.target.files).map(file => ({
-      id: Date.now(),
+    const formData = new FormData();
+    const selectedFiles = Array.from(event.target.files);
+  
+    const newFiles = selectedFiles.map(file => ({
       name: file.name,
-      size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-      date: new Date().toLocaleDateString(),
-      type: file.type.split('/')[1].toUpperCase(),
     }));
     setFiles([...files, ...newFiles]);
+  
+    selectedFiles.forEach(file => {
+      formData.append('proof', file);         
+      formData.append('name', file.name);
+    });
+  
+    fetch('http://127.0.0.1:3000/api/users/attachment/create', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Upload success:', data);
+      })
+      .catch(error => {
+        console.error('Upload error:', error);
+      });
   };
-
-  const handleDelete = (id) => {
-    setFiles(files.filter(file => file.id !== id));
-  };
+  
 
   return (
     <ThemeProvider>
@@ -51,7 +69,7 @@ const Attachments = () => {
         <main className="flex-1 p-4 sm:p-6 lg:ml-64 lg:p-8">
           <h1 className="text-2xl font-bold mb-6">Justificatifs</h1>
           <FileUploadZone onFileUpload={handleFileUpload} />
-          <FileList files={files} onDelete={handleDelete} />
+          <FileList files={files} />
         </main>
       </div>
     </ThemeProvider>

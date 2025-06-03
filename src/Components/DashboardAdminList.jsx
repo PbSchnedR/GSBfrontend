@@ -116,7 +116,7 @@ const DashboardAdminList = ({ users }) => {
           'Authorization': `Bearer ${token}`
         }
       });
-      if (response.ok) {
+      if (response.status === 200) {
         /*setIsModalDeleteOpen(false);
         navigate(0);*/
         const bill_response = await fetch(`http://127.0.0.1:3000/api/bills/user/${selectedUser._id}`, {
@@ -125,12 +125,12 @@ const DashboardAdminList = ({ users }) => {
             'Authorization': `Bearer ${token}`
           }
         });
-        if (bill_response.ok) {
+        if (bill_response.status === 200) {
           setIsModalDeleteOpen(false);
           navigate(0);
         }
         else{
-          alert('Erreur lors de la suppression des notes de frais ou aucune note de frais trouvée');
+          alert();
           setIsModalDeleteOpen(false);
           navigate(0);
         }

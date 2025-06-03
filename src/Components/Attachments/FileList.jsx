@@ -1,7 +1,34 @@
 import React from 'react';
 import { HiDocument, HiTrash } from 'react-icons/hi';
+import { useState } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const FileList = ({ files, onDelete }) => {
+const FileList = ({ files }) => {
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+
+  const handleDelete = async (file) => {
+    const response = await fetch(`http://127.0.0.1:3000/api/users/attachment/delete/delete?attachmentId=${file._id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    });
+  
+    const data = await response.json();
+    console.log(data);
+  
+    if (response.status === 200) {
+      navigate(0);
+    } else {
+      console.error('Erreur lors de la suppression de la pièce jointe:', data);
+    }
+  };
+  
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
       <div className="p-6 border-b border-gray-200">
@@ -21,7 +48,7 @@ const FileList = ({ files, onDelete }) => {
                 </div>
               </div>
               <button
-                onClick={() => onDelete(file.id)}
+                onClick={() => handleDelete(file)}
                 className="text-red-600 hover:text-red-700 p-2 rounded-full hover:bg-red-50"
               >
                 <HiTrash className="w-5 h-5" />
