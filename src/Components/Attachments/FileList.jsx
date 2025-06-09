@@ -11,7 +11,7 @@ const FileList = ({ files }) => {
 
 
   const handleDelete = async (file) => {
-    const response = await fetch(`http://127.0.0.1:3000/api/users/attachment/delete/delete?attachmentId=${file._id}`, {
+    const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/attachment/delete/delete?attachmentId=${file._id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -41,7 +41,7 @@ const FileList = ({ files }) => {
               <div className="flex items-center gap-4">
                 <HiDocument className="w-8 h-8 text-gray-400" />
                 <div>
-                  <p className="font-medium">{file.name}</p>
+                  <p className="font-medium">{file.fileName}</p>
                   <p className="text-sm text-gray-500">
                     {file.size} • {file.type} • Ajouté le {file.date}
                   </p>

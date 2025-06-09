@@ -76,7 +76,7 @@ const DashboardAdminList = ({ users }) => {
 
   const fetchUserBills = async (userId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:3000/api/bills/user/${userId}`, {
+      const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/bills/user/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ const DashboardAdminList = ({ users }) => {
 
   const handleDeleteUser = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:3000/api/users/${selectedUser._id}`, {
+      const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/${selectedUser._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -119,7 +119,7 @@ const DashboardAdminList = ({ users }) => {
       if (response.status === 200) {
         /*setIsModalDeleteOpen(false);
         navigate(0);*/
-        const bill_response = await fetch(`http://127.0.0.1:3000/api/bills/user/${selectedUser._id}`, {
+        const bill_response = await fetch(`https://gsbbackend-jw66.onrender.com/api/bills/user/${selectedUser._id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

@@ -14,7 +14,7 @@ const Attachments = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://127.0.0.1:3000/api/users/attachment/get', {
+        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users/attachment/get', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -22,7 +22,6 @@ const Attachments = () => {
           }
         });
         const data = await response.json();
-        console.log(data);
         setFiles(data || []);
 
       } catch (error) {
@@ -45,7 +44,7 @@ const Attachments = () => {
       formData.append('name', file.name);
     });
   
-    fetch('http://127.0.0.1:3000/api/users/attachment/create', {
+    fetch('https://gsbbackend-jw66.onrender.com/api/users/attachment/create', {
       method: 'POST',
       body: formData,
       headers: {
@@ -55,6 +54,7 @@ const Attachments = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Upload success:', data);
+        navigate(0);
       })
       .catch(error => {
         console.error('Upload error:', error);

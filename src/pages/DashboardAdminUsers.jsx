@@ -39,7 +39,7 @@ const DashboardAdminUsers = () => {
   useEffect(() => {
     (async () => {
       try{
-        const response = await fetch('http://127.0.0.1:3000/api/users',
+        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users',
           {
             method: 'GET',
             headers: {

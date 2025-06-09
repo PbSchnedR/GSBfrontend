@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3000/api/users/${user.id}`, {
+        const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/${user.id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const Profile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:3000/api/users/${user.id}`, {
+      const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

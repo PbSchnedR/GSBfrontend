@@ -31,7 +31,7 @@ const EditUserModal = ({ isOpen = false, onClose = () => {}, user = {} }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://127.0.0.1:3000/api/users/${user._id}`, {
+      const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/${user._id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

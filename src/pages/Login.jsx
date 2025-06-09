@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/GSB_logo.png';
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -19,7 +20,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:3000/api/login', {
+      const response = await fetch('https://gsbbackend-jw66.onrender.com/api/login', {
         method: 'POST',
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
         headers: {
@@ -46,7 +47,7 @@ const Login = () => {
       return;
     }
     try {   
-      const response = await fetch('http://127.0.0.1:3000/api/users', {
+      const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users', {
         method: 'POST',
         body: JSON.stringify({ 
           email: signupEmail, 
@@ -61,7 +62,7 @@ const Login = () => {
       const data = await response.json();
       if(data){
         try {
-          const response = await fetch('http://127.0.0.1:3000/api/login', {
+          const response = await fetch('https://gsbbackend-jw66.onrender.com/api/login', {
             method: 'POST',
             body: JSON.stringify({ email: signupEmail, password: signupPassword }),
             headers: {
@@ -92,7 +93,7 @@ const Login = () => {
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md border border-gray-200">
         <div className="flex flex-col items-center mb-10 space-y-4">
           {/* Logo ou icône ici */}
-          <img src="/src/assets/GSB_logo.png" alt="GSB_logo" className="w-50 h-40" />
+          <img src={logo} alt="GSB_logo" className="w-50 h-40" />
           <h2 className="text-2xl font-semibold mb-1 text-center">
             {isSignUp ? "Inscription" : "Connexion à votre compte"}
           </h2>
@@ -203,26 +204,7 @@ const Login = () => {
             </button>
           </form>
         )}
-        <div className="my-4 flex items-center">
-          <div className="flex-grow h-px bg-gray-200" />
-          <span className="mx-2 text-gray-400 text-sm">ou</span>
-          <div className="flex-grow h-px bg-gray-200" />
-        </div>
-        <button className="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 transition">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
-          {isSignUp ? "S'inscrire avec Google" : "Se connecter avec Google"}
-        </button>
-        <p className="mt-6 text-center text-sm text-gray-500">
-          {isSignUp ? (
-            <>Vous avez déjà un compte ?{' '}
-              <button className="text-purple-600 hover:underline" onClick={() => setIsSignUp(false)}>Se connecter</button>
-            </>
-          ) : (
-            <>Vous n'avez pas de compte ?{' '}
-              <button className="text-purple-600 hover:underline" onClick={() => setIsSignUp(true)}>S'inscrire</button>
-            </>
-          )}
-        </p>
+       
       </div>
     </div>
   );

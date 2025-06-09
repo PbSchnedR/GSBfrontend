@@ -52,7 +52,7 @@ const DashboardList = ({sortedBills}) => {
   useEffect(() => {
     (async () => {
       try{
-        const response = await fetch('http://127.0.0.1:3000/api/bills',
+        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/bills',
           {
             method: 'GET',
             headers: {
