@@ -44,21 +44,21 @@ const Statistics = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/bills/stats/byUser', {
+        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/bills/stats/byUser', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
         const data = await response.json();
-        setBills(data);
+        setBills(Array.isArray(data) ? data : []);
         
         // Mise à jour des stats
         setStats(prevStats => {
           const newStats = [...prevStats];
           // Total notes de frais
-          newStats[0].value = data.length.toString();
+          newStats[0].value = Array.isArray(data) ? data.length.toString() : '0';
           // Montant total
-          const totalAmount = calculateTotalAmount(data);
+          const totalAmount = Array.isArray(data) ? calculateTotalAmount(data) : 0;
           newStats[1].value = `${totalAmount.toFixed(2)} €`;
           return newStats;
         });

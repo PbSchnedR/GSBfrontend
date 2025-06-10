@@ -19,6 +19,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
       const response = await fetch('https://gsbbackend-jw66.onrender.com/api/login', {
         method: 'POST',
@@ -29,23 +30,32 @@ const Login = () => {
       });
       const data = await response.json();
       if(!data.token){
-        alert('Email ou mot de passe incorrect');
+        setError('Email ou mot de passe incorrect');
         return;
       }
       localStorage.setItem('token', data.token);
       navigate('/dashboard');
       navigate(0);
     } catch (error) {
+      setError('Une erreur est survenue lors de la connexion');
       console.log(error);
     }
   }
 
   const handlesignup = async (e) => {
     e.preventDefault();
-    if(signupPassword !== signupPasswordConfirm){
-      alert('Les mots de passe ne correspondent pas');
+    setError('');
+
+    if(signupPassword.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères');
       return;
     }
+
+    if(signupPassword !== signupPasswordConfirm){
+      setError('Les mots de passe ne correspondent pas');
+      return;
+    }
+
     try {   
       const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users', {
         method: 'POST',
@@ -71,19 +81,21 @@ const Login = () => {
           });
           const data = await response.json();
           if(!data.token){
-            alert('Email ou mot de passe incorrect');
+            setError('Email ou mot de passe incorrect');
             return;
           }
           localStorage.setItem('token', data.token);
           navigate('/dashboard');
           navigate(0);
         } catch (error) {
+          setError('Une erreur est survenue lors de la connexion');
           console.log(error);
         }
       }else{
-        alert('Inscription échouée');
+        setError('Inscription échouée');
       }
     } catch (error) {
+      setError('Une erreur est survenue lors de l\'inscription');
       console.log(error);
     }
   }
@@ -117,6 +129,11 @@ const Login = () => {
             Se connecter
           </button>
         </div>
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+            {error}
+          </div>
+        )}
         {isSignUp ? (
           <form className="space-y-4" onSubmit={handlesignup}>
             <div>
@@ -189,13 +206,7 @@ const Login = () => {
                 onChange={(e) => setLoginPassword(e.target.value)}
               />
             </div>
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                Se souvenir pendant 30 jours
-              </label>
-              <a href="#" className="text-purple-600 hover:underline">Mot de passe oublié</a>
-            </div>
+            
             <button 
               type="submit" 
               className="w-full py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition"

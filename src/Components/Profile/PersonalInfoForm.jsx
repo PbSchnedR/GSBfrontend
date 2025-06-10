@@ -36,20 +36,6 @@ const PersonalInfoForm = ({ isEditing, formData, handleChange, profile }) => {
           )}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">RIB</label>
-          {isEditing ? (
-            <input
-              type="text"
-              name="rib"
-              value={formData.rib}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
-            />
-          ) : (
-            <p className="text-gray-900">{profile.rib}</p>
-          )}
-        </div>
       </div>
     </div>
   );

@@ -12,16 +12,22 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
   const [formData, setFormData] = useState({
     amount: bill?.montant?.replace(' €', '') || '',
     date: bill?.dateNote || '',
-    type: bill?.type || 'restaurant',
+    type: bill?.type || 'Repas',
     description: bill?.description || '',
   });
   const navigate = useNavigate();
 
   useEffect(() => {
+    const formatDateForInput = (dateString) => {
+      if (!dateString) return '';
+      const [day, month, year] = dateString.split('/');
+      return `${year}-${month}-${day}`;
+    };
+
     setFormData({
       amount: bill?.montant?.replace(' €', '') || '',
-      date: bill?.dateNote || '',
-      type: bill?.type || 'restaurant',
+      date: formatDateForInput(bill?.dateNote) || '',
+      type: bill?.type || 'Repas',
       description: bill?.description || '',
     });
   }, [bill]);
@@ -39,7 +45,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
     setFormData({
       amount: bill?.montant?.replace(' €', '') || '',
       date: bill?.dateNote || '',
-      type: bill?.type || 'restaurant',
+      type: bill?.type || 'Repas',
       description: bill?.description || '',
     });
     (async () => {
@@ -218,10 +224,10 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
                           onChange={handleChange}
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                         >
-                          <option value="restaurant">Restaurant</option>
-                          <option value="transport">Transport</option>
-                          <option value="hotel">Hôtel</option>
-                          <option value="other">Autre</option>
+                          <option value="Repas">Repas</option>
+                          <option value="Transport">Transport</option>
+                          <option value="Hôtel">Hôtel</option>
+                          <option value="Autre">Autre</option>
                         </select>
                       </div>
                       <div>
