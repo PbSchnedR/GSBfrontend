@@ -13,7 +13,6 @@ const Profile = () => {
   const [profile, setProfile] = useState({
     name: '',
     email: '',
-    rib: '',
     role: '',
     department: '',
   });

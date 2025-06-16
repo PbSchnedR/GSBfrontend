@@ -95,7 +95,7 @@ const DashboardList = ({sortedBills}) => {
   };
 
   const getSortedNotes = () => {
-    if (!sortedBills) return notes;
+    if (!sortedBills) return [];
     
     return [...notes].sort((a, b) => {
       if (sortedBills === 'date') {
