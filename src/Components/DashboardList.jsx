@@ -62,7 +62,12 @@ const DashboardList = ({sortedBills}) => {
           }
         );
         const data = await response.json();
-        setNotes(data);
+        if (response.status === 200) {
+          setNotes(data);
+        }
+        else {
+          setNotes([]);
+        }
       } catch (error) {
         console.error('Erreur lors de la récupération des notes de frais:', error);
       }
@@ -95,7 +100,7 @@ const DashboardList = ({sortedBills}) => {
   };
 
   const getSortedNotes = () => {
-    if (!sortedBills) return [];
+    if (!sortedBills) return notes;
     
     return [...notes].sort((a, b) => {
       if (sortedBills === 'date') {
