@@ -62,8 +62,9 @@ const DashboardList = ({sortedBills}) => {
           }
         );
         const data = await response.json();
+        console.log(data);
         if (response.status === 200) {
-          setNotes(data);
+          setNotes(data.bills);
         }
         else {
           setNotes([]);
