@@ -19,7 +19,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
   useEffect(() => {
     const fetchAttachments = async () => {
       try {
-        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users/attachment/get', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/attachment/get`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
       };
       formData.append('metadata', JSON.stringify(metadata));
   
-      const response = await fetch('https://gsbbackend-jw66.onrender.com/api/bills', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -95,7 +95,7 @@ const CreateBillModal = ({ isOpen = false, onClose = () => {} }) => {
     }
 
     try {
-      const response = await fetch('https://gsbbackend-jw66.onrender.com/api/bills/withAttachment', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/withAttachment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

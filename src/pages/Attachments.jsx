@@ -14,7 +14,7 @@ const Attachments = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users/attachment/get', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/attachment/get`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const Attachments = () => {
       formData.append('name', file.name);
     });
   
-    fetch('https://gsbbackend-jw66.onrender.com/api/users/attachment/create', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/attachment/create`, {
       method: 'POST',
       body: formData,
       headers: {

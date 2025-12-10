@@ -51,7 +51,7 @@ const UserBills = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response_user = await fetch(`http://localhost:3000/api/users/${userId}`, {
+        const response_user = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const UserBills = () => {
         const data_user = await response_user.json();
         setUser(data_user);
 
-        const response_bills = await fetch(`http://localhost:3000/api/bills/user/${userId}`, {
+        const response_bills = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/user/${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

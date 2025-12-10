@@ -39,7 +39,7 @@ const ChangePswd = ({ isOpen = false, onClose = () => {} }) => {
     }
 
     try {
-      const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/changePassword/${user.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/changePassword/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

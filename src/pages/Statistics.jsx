@@ -44,7 +44,7 @@ const Statistics = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/bills/stats/byUser', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/stats/byUser`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

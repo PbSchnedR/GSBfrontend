@@ -11,7 +11,7 @@ const FileList = ({ files }) => {
 
 
   const handleDelete = async (file) => {
-    const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/users/attachment/delete/delete?attachmentId=${file._id}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/attachment/delete/delete?attachmentId=${file._id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`

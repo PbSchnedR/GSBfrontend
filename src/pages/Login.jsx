@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('https://gsbbackend-jw66.onrender.com/api/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
         method: 'POST',
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
         headers: {
@@ -57,7 +57,7 @@ const Login = () => {
     }
 
     try {   
-      const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
         method: 'POST',
         body: JSON.stringify({ 
           email: signupEmail, 
@@ -72,7 +72,7 @@ const Login = () => {
       const data = await response.json();
       if(data){
         try {
-          const response = await fetch('https://gsbbackend-jw66.onrender.com/api/login', {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
             method: 'POST',
             body: JSON.stringify({ email: signupEmail, password: signupPassword }),
             headers: {

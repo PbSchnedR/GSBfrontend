@@ -52,7 +52,7 @@ const DashboardList = ({sortedBills}) => {
   useEffect(() => {
     (async () => {
       try{
-        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/bills',
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills`,
           {
             method: 'GET',
             headers: {

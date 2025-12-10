@@ -50,7 +50,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
     });
     (async () => {
       try{
-        const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/bills/${bill?._id}`,
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/${bill?._id}`,
           {
             method: 'PUT',
             headers: {
@@ -78,7 +78,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
   const handleDelete = () => {
     (async () => {
       try{
-        const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/bills/${bill?._id}`,
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/${bill?._id}`,
           {
             method: 'DELETE',
             headers: {
@@ -99,7 +99,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
   const handleValidate = () => {
     (async () => {
       try {
-        const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/bills/${bill?._id}/validate`,
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/${bill?._id}/validate`,
           {
             method: 'PUT',
             headers: {
@@ -121,7 +121,7 @@ const BillDetailsModal = ({ isOpen, onClose, bill }) => {
   const handleReject = () => {
     (async () => {
       try {
-        const response = await fetch(`https://gsbbackend-jw66.onrender.com/api/bills/${bill?._id}/reject`,
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/bills/${bill?._id}/reject`,
           {
             method: 'PUT',
             headers: {

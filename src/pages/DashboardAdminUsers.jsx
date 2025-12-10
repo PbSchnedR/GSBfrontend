@@ -39,7 +39,7 @@ const DashboardAdminUsers = () => {
   useEffect(() => {
     (async () => {
       try{
-        const response = await fetch('https://gsbbackend-jw66.onrender.com/api/users',
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`,
           {
             method: 'GET',
             headers: {
