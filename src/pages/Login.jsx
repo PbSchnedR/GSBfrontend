@@ -5,6 +5,7 @@ import logo from '../assets/GSB_logo.png';
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // États pour le formulaire de connexion
@@ -20,6 +21,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
         method: 'POST',
@@ -39,6 +41,8 @@ const Login = () => {
     } catch (error) {
       setError('Une erreur est survenue lors de la connexion');
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -56,7 +60,8 @@ const Login = () => {
       return;
     }
 
-    try {   
+    setLoading(true);
+    try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
         method: 'POST',
         body: JSON.stringify({ 
@@ -97,6 +102,8 @@ const Login = () => {
     } catch (error) {
       setError('Une erreur est survenue lors de l\'inscription');
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -177,11 +184,20 @@ const Login = () => {
                 onChange={(e) => setSignupPasswordConfirm(e.target.value)}
               />
             </div>
-            <button 
-              type="submit" 
-              className="w-full py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition"
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-2 rounded-md font-semibold transition flex items-center justify-center text-white ${loading ? 'bg-purple-300 cursor-not-allowed' : 'bg-purple-500 hover:bg-purple-600'}`}
             >
-              S'inscrire
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                  Inscription en cours...
+                </>
+              ) : "S'inscrire"}
             </button>
           </form>
         ) : (
@@ -207,11 +223,20 @@ const Login = () => {
               />
             </div>
             
-            <button 
-              type="submit" 
-              className="w-full py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-md font-semibold transition"
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-2 rounded-md font-semibold transition flex items-center justify-center text-white ${loading ? 'bg-purple-300 cursor-not-allowed' : 'bg-purple-500 hover:bg-purple-600'}`}
             >
-              Se connecter
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                  Connexion en cours...
+                </>
+              ) : 'Se connecter'}
             </button>
           </form>
         )}
