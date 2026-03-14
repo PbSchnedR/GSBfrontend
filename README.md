@@ -1,6 +1,19 @@
 # GSB Frontend
 
-## Présentation du projet
+> **Note :** Le backend est hebergé sur Render (offre gratuite). Le serveur peut mettre jusqu'a 30 secondes a demarrer lors de la premiere requete s'il est inactif. Merci de patienter lors de la connexion.
+
+---
+
+## Comptes de demonstration
+
+| Role | Email | Mot de passe |
+|------|-------|-------------|
+| Utilisateur | `jean@doe.com` | `password` |
+| Administrateur | `jean@admin.com` | `password` |
+
+---
+
+## Presentation du projet
 
 Ce projet constitue l'interface utilisateur de l'application **GSB (Gestion de Suivi des Bordereaux)**, développée dans le cadre de l'**épreuve E5 du BTS SIO (Services Informatiques aux Organisations)**, option **SLAM (Solutions Logicielles et Applications Métier)**.
 
@@ -204,37 +217,6 @@ npm run build
 - **Validation** : Validation ou refus des bordereaux
 
 ---
-
-## Comptes de démonstration
-
-Pour tester l'application, deux comptes sont disponibles :
-
-### 👤 Utilisateur standard
-- **Email** : `jean@doe.com`
-- **Mot de passe** : `password`
-- **Rôle** : Utilisateur basique
-
-**Fonctionnalités accessibles** :
-- ✅ Création et gestion de ses propres bordereaux
-- ✅ Consultation de ses statistiques personnelles
-- ✅ Gestion de sa bibliothèque de pièces jointes
-- ✅ Modification de son profil
-- ✅ Consultation de l'historique de ses bordereaux
-
-### 👨‍💼 Administrateur
-- **Email** : `jean@admin.com`
-- **Mot de passe** : `password`
-- **Rôle** : Administrateur
-
-**Fonctionnalités accessibles** :
-- ✅ Toutes les fonctionnalités utilisateur standard
-- ✅ Accès au tableau de bord administrateur
-- ✅ Gestion de tous les utilisateurs (consultation, modification, suppression)
-- ✅ Validation et refus des bordereaux de tous les utilisateurs
-- ✅ Consultation des statistiques globales
-- ✅ Vue d'ensemble de l'activité de l'application
-
-**Note importante** : Ces comptes doivent être présents dans la base de données backend pour fonctionner. Assurez-vous que le backend est démarré et que ces utilisateurs existent.
 
 ---
 
